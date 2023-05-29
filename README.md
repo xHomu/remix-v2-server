@@ -1,3 +1,15 @@
+An example repo to demo how to setup Remix with the new dev server with HMR/HDR.
+
+Depending on whether you're using esm/cjs server, or whether you're using server.js/ts, the following files needs to be adjusted:
+
+* package.json
+* remix.config.js
+* server.ts/js
+
+Check the branches to see how they differ.
+
+----
+
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
