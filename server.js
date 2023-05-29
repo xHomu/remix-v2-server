@@ -35,7 +35,7 @@ app.use(morgan("tiny"));
 app.all(
   "*",
   process.env.NODE_ENV === "development"
-    ? async (req, res, next) => {
+    ? (req, res, next) => {
         try {
           return createRequestHandler({
             build: devBuild,
