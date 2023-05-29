@@ -4,13 +4,10 @@ import express from "express";
 import compression from "compression";
 import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
-import { ServerBuild, broadcastDevReady, installGlobals } from "@remix-run/node";
+import { broadcastDevReady, installGlobals } from "@remix-run/node";
 
-// @ts-ignore - this file may not exist if you haven't built yet, but it will
-// definitely exist by the time the dev or prod server actually runs.
-import * as remixBuild from "./build/index.js";
-const build = remixBuild as unknown as ServerBuild
-let devBuild = build
+import * as build from "./build/index.js";
+let devBuild = build;
 
 const BUILD_PATH = "./build/index.js";
 
@@ -39,15 +36,15 @@ app.all(
   "*",
   process.env.NODE_ENV === "development"
     ? async (req, res, next) => {
-      try {
-        return createRequestHandler({
-          build: devBuild,
-          mode: "development",
-        })(req, res, next);
-      } catch (error) {
-        next(error);
+        try {
+          return createRequestHandler({
+            build: devBuild,
+            mode: "development",
+          })(req, res, next);
+        } catch (error) {
+          next(error);
+        }
       }
-    }
     : createRequestHandler({
         build,
         mode: process.env.NODE_ENV,
@@ -65,7 +62,7 @@ app.listen(port, async () => {
 });
 
 // during dev, we'll keep the build module up to date with the changes
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === "development") {
   const watcher = chokidar.watch(BUILD_PATH, { ignoreInitial: true });
 
   watcher.on("all", async () => {
