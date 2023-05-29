@@ -1,5 +1,4 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
+import * as fs from "node:fs";
 import chokidar from "chokidar";
 import express from "express";
 import compression from "compression";
@@ -67,13 +66,13 @@ app.listen(port, async () => {
 
 // during dev, we'll keep the build module up to date with the changes
 if (process.env.NODE_ENV === 'development') {
-	async function reloadBuild() {
-		devBuild = await import(`${BUILD_PATH}?update=${Date.now()}`)
-		broadcastDevReady(devBuild)
-	}
+  const watcher = chokidar.watch(BUILD_PATH, { ignoreInitial: true });
 
-	const dirname = path.dirname(fileURLToPath(import.meta.url))
-	const watchPath = path.join(dirname, BUILD_PATH).replace(/\\/g, '/')
-	const watcher = chokidar.watch(watchPath, { ignoreInitial: true })
-	watcher.on('all', reloadBuild)
+  watcher.on("all", async () => {
+    // 1. purge require cache && load updated server build
+    const stat = fs.statSync(BUILD_PATH);
+    devBuild = await import(BUILD_PATH + "?t=" + stat.mtimeMs);
+    // 2. tell dev server that this app server is now ready
+    broadcastDevReady(devBuild);
+  });
 }
