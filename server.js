@@ -1,14 +1,14 @@
-import path from "path";
-import chokidar from "chokidar";
-import express from "express";
-import compression from "compression";
-import morgan from "morgan";
-import { createRequestHandler } from "@remix-run/express";
-import { broadcastDevReady, installGlobals } from "@remix-run/node";
-
-const BUILD_DIR = path.join(process.cwd(), "build");
+const path = require("path");
+const chokidar = require("chokidar");
+const { createRequestHandler } = require("@remix-run/express");
+const { broadcastDevReady, installGlobals } = require("@remix-run/node");
+const compression = require("compression");
+const express = require("express");
+const morgan = require("morgan");
 
 installGlobals();
+
+const BUILD_DIR = path.join(process.cwd(), "build");
 
 const app = express();
 
@@ -32,25 +32,20 @@ app.use(morgan("tiny"));
 app.all(
   "*",
   process.env.NODE_ENV === "development"
-    ? async (req, res, next) => {
-        try {
-          return createRequestHandler({
-            build: require(BUILD_DIR),
-            mode: process.env.NODE_ENV,
-          })(req, res, next);
-        } catch (error) {
-          next(error);
-        }
+    ? (req, res, next) => {
+        return createRequestHandler({
+          build: require(BUILD_DIR),
+          mode: process.env.NODE_ENV,
+        })(req, res, next);
       }
     : createRequestHandler({
         build: require(BUILD_DIR),
         mode: process.env.NODE_ENV,
       })
 );
-
 const port = process.env.PORT || 3000;
 
-app.listen(port, async () => {
+app.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
 
   if (process.env.NODE_ENV === "development") {
