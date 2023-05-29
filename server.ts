@@ -1,18 +1,12 @@
-import * as fs from "node:fs";
+import path from "path";
 import chokidar from "chokidar";
 import express from "express";
 import compression from "compression";
 import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
-import { ServerBuild, broadcastDevReady, installGlobals } from "@remix-run/node";
+import { broadcastDevReady, installGlobals } from "@remix-run/node";
 
-// @ts-ignore - this file may not exist if you haven't built yet, but it will
-// definitely exist by the time the dev or prod server actually runs.
-import * as remixBuild from "./build/index.js";
-const build = remixBuild as unknown as ServerBuild
-let devBuild = build
-
-const BUILD_PATH = "./build/index.js";
+const BUILD_DIR = path.join(process.cwd(), "build");
 
 installGlobals();
 
@@ -41,15 +35,15 @@ app.all(
     ? async (req, res, next) => {
       try {
         return createRequestHandler({
-          build: devBuild,
-          mode: "development",
+          build: require(BUILD_DIR),
+          mode: process.env.NODE_ENV,
         })(req, res, next);
       } catch (error) {
         next(error);
       }
     }
     : createRequestHandler({
-        build,
+        build: require(BUILD_DIR),
         mode: process.env.NODE_ENV,
       })
 );
@@ -60,19 +54,21 @@ app.listen(port, async () => {
   console.log(`Express server listening on port ${port}`);
 
   if (process.env.NODE_ENV === "development") {
-    broadcastDevReady(build);
+    broadcastDevReady(require(BUILD_DIR));
   }
 });
 
 // during dev, we'll keep the build module up to date with the changes
 if (process.env.NODE_ENV === 'development') {
-  const watcher = chokidar.watch(BUILD_PATH, { ignoreInitial: true });
-
-  watcher.on("all", async () => {
-    // 1. purge require cache && load updated server build
-    const stat = fs.statSync(BUILD_PATH);
-    devBuild = await import(BUILD_PATH + "?t=" + stat.mtimeMs);
-    // 2. tell dev server that this app server is now ready
-    broadcastDevReady(devBuild);
-  });
+	const watcher = chokidar.watch(BUILD_DIR, {
+		ignored: ['**/**.map'],
+	})
+	watcher.on('all', () => {
+		for (const key in require.cache) {
+			if (key.startsWith(BUILD_DIR)) {
+				delete require.cache[key]
+			}
+		}
+		broadcastDevReady(require(BUILD_DIR))
+	})
 }
