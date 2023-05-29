@@ -33,15 +33,15 @@ app.all(
   "*",
   process.env.NODE_ENV === "development"
     ? async (req, res, next) => {
-      try {
-        return createRequestHandler({
-          build: require(BUILD_DIR),
-          mode: process.env.NODE_ENV,
-        })(req, res, next);
-      } catch (error) {
-        next(error);
+        try {
+          return createRequestHandler({
+            build: require(BUILD_DIR),
+            mode: process.env.NODE_ENV,
+          })(req, res, next);
+        } catch (error) {
+          next(error);
+        }
       }
-    }
     : createRequestHandler({
         build: require(BUILD_DIR),
         mode: process.env.NODE_ENV,
@@ -59,16 +59,16 @@ app.listen(port, async () => {
 });
 
 // during dev, we'll keep the build module up to date with the changes
-if (process.env.NODE_ENV === 'development') {
-	const watcher = chokidar.watch(BUILD_DIR, {
-		ignored: ['**/**.map'],
-	})
-	watcher.on('all', () => {
-		for (const key in require.cache) {
-			if (key.startsWith(BUILD_DIR)) {
-				delete require.cache[key]
-			}
-		}
-		broadcastDevReady(require(BUILD_DIR))
-	})
+if (process.env.NODE_ENV === "development") {
+  const watcher = chokidar.watch(BUILD_DIR, {
+    ignored: ["**/**.map"],
+  });
+  watcher.on("all", () => {
+    for (const key in require.cache) {
+      if (key.startsWith(BUILD_DIR)) {
+        delete require.cache[key];
+      }
+    }
+    broadcastDevReady(require(BUILD_DIR));
+  });
 }

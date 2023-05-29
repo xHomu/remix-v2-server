@@ -3,8 +3,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
-    "dev": "remix dev -c \"npm run dev:server\" --no-restart",
-    "dev:server": "tsx watch --clear-screen=false --ignore \"app/**\" --ignore \"build/**\" --ignore \"node_modules/**\" ./server.ts",
+    "dev": "remix dev --no-restart -c \"node server.js\"",
     "start": "cross-env NODE_ENV=production tsx ./server.ts",
     "typecheck": "tsc"
   },
@@ -31,7 +30,6 @@
     "@types/react-dom": "^18.0.11",
     "chokidar": "^3.5.3",
     "eslint": "^8.38.0",
-    "tsx": "^3.12.7",
     "typescript": "^5.0.4"
   },
   "engines": {
