@@ -4,9 +4,15 @@ Depending on whether you're using esm/cjs server, or whether you're using server
 
 * package.json
 * remix.config.js
-* server.ts/js
+* tsconfig.json
+* server.ts or server.js
 
-Check the branches to see how they differ.
+Check the branches to see how they differ:
+
+* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.js)
+* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.ts)
+* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/main...esm-server.js)
+* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/main...esm-server.ts)
 
 ----
 
