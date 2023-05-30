@@ -1,6 +1,13 @@
-An example repo to demo how to setup Remix with the new dev server with HMR/HDR.
+An sample repo to show how to setup the new Remix dev server for better development experience and HMR/HDR support.
 
-Depending on whether you're using esm/cjs server, or whether you're using server.js/ts, the following files needs to be adjusted:
+For more on Remix v2 dev server, check the talks from Pedro Cattori @pcattori
+
+* [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
+* [EpicWeb.dev Live stream: Upgrading to Remix 1.16.0](https://www.youtube.com/watch?v=IjE18rXpp9Q)
+
+---
+
+Depending on whether you're using native esm/cjs server and server.js/ts, the following files needs to be adjusted:
 
 * package.json
 * remix.config.js
@@ -12,7 +19,15 @@ Check the branches to see how they differ:
 * [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.js)
 * [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.ts)
 * [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/main...esm-server.js)
-* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/main...esm-server.ts)
+* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/main) (you are here)
+
+
+## Troubleshooting
+
+There are two bugs with Remix v1.16.1 you have to watch out for:
+
+* Syntax Error causing dev server to crash: https://github.com/remix-run/remix/pull/6467 The fix is introduced to the nightly build.
+* `tsx watch` does not start the dev server on Windows: https://github.com/remix-run/remix/issues/6504
 
 ----
 
