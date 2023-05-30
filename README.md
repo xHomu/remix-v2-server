@@ -1,9 +1,4 @@
-An sample repo to show how to setup the new Remix dev server for better development experience and HMR/HDR support.
-
-For more on Remix v2 dev server, check the talks from Pedro Cattori @pcattori
-
-* [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
-* [EpicWeb.dev Live stream: Upgrading to Remix 1.16.0](https://www.youtube.com/watch?v=IjE18rXpp9Q)
+An sample repo for setting up the new Remix v2 dev server, which offers better development experience and HMR/HDR support.
 
 ---
 
@@ -19,15 +14,47 @@ Check the branches to see how they differ:
 * [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.js)
 * [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.ts)
 * [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/main...esm-server.js)
-* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/main) (you are here)
+* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server) (you are here)
+
+For more on Remix v2 dev server, check these talks by Pedro Cattori @pcattori
+
+* [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
+* [EpicWeb.dev Live stream: Upgrading to Remix 1.16.0](https://www.youtube.com/watch?v=IjE18rXpp9Q)
 
 
 ## Troubleshooting
 
-There are two bugs with Remix v1.16.1 you have to watch out for:
+Dev Server bugs with Remix v1.16.1 to watch out for:
 
-* Syntax Error causing dev server to crash: https://github.com/remix-run/remix/pull/6467 The fix is introduced to the nightly build.
-* `tsx watch` does not start the dev server on Windows: https://github.com/remix-run/remix/issues/6504
+### Syntax Error causes dev server to crash
+
+* Reference https://github.com/remix-run/remix/pull/6467 
+
+The fix is introduced to the nightly build.
+
+### `tsx watch` fails to start on Windows
+
+* Reference https://github.com/remix-run/remix/issues/6504
+
+patch-package `node_modules\@remix-run\dev\dist\devServer_unstable\index.js`
+
+```js
+    let newAppServer = execa.command(command, {
+-     stdio: "pipe",
++     stdio: ['ignore', 'pipe', 'pipe'],
++     shell: true,
+      env: {
+        NODE_ENV: "development",
+        PATH:
+          bin + (process.platform === "win32" ? ";" : ":") + process.env.PATH,
+        REMIX_DEV_HTTP_ORIGIN: stringifyOrigin(httpOrigin),
+      },
+      // https://github.com/sindresorhus/execa/issues/433
+      windowsHide: false,
+    });
+```
+
+ Alternatively, you can temporarily remove the tsx watch flag, `"dev:server": "tsx ./server.ts",`. However, this will prevent the dev server from auto restart when a change is made to server.ts!
 
 ----
 
