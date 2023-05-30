@@ -4,7 +4,8 @@ import express from "express";
 import compression from "compression";
 import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
-import { ServerBuild, broadcastDevReady, installGlobals } from "@remix-run/node";
+import type { ServerBuild} from "@remix-run/node";
+import { broadcastDevReady, installGlobals } from "@remix-run/node";
 
 // @ts-ignore - this file may not exist if you haven't built yet, but it will
 // definitely exist by the time the dev or prod server actually runs.
