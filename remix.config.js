@@ -6,6 +6,7 @@ export default {
   // serverBuildPath: "build/index.js",
   // publicPath: "/build/",
   serverModuleFormat: "esm",
+  tailwind: true,
   future: {
     unstable_dev: true,
     v2_errorBoundary: true,
