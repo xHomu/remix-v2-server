@@ -1,5 +1,6 @@
-export default {
-    plugins: {
-      autoprefixer: {},
-    },
-  };
+/** @type {import('postcss-load-config').Config} */
+module.exports = {
+  plugins: {
+    autoprefixer: {},
+  },
+};
