@@ -7,6 +7,7 @@ export default {
   // publicPath: "/build/",
   serverModuleFormat: "esm",
   tailwind: true,
+  postcss: true,
   future: {
     unstable_dev: true,
     v2_errorBoundary: true,
