@@ -30,7 +30,9 @@ Dev Server bugs with Remix v1.16.1 to watch out for:
 
 * Reference https://github.com/remix-run/remix/pull/6467 
 
-The fix is introduced to the nightly build.
+~~The fix is introduced to the nightly build.~~
+
+This is fixed in v1.17.0.
 
 ### `tsx watch` fails to start on Windows
 
