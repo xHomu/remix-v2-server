@@ -24,24 +24,25 @@ For more on Remix v2 dev server, check these talks by Pedro Cattori @pcattori
 
 ## Troubleshooting
 
-Dev Server bugs with Remix v1.16.1 to watch out for:
-
 ### Syntax Error causes dev server to crash
 
 * Reference https://github.com/remix-run/remix/pull/6467 
 
-The fix is introduced to the nightly build.
+This is fixed in v1.17.0+.
 
 ### `tsx watch` fails to start on Windows
 
-* Reference https://github.com/remix-run/remix/issues/6504
+* Reference https://github.com/remix-run/remix/pull/6538
 
-patch-package `node_modules\@remix-run\dev\dist\devServer_unstable\index.js`
+Due to upstream `tsx watch` bug, we would use `ts-node` instead. 
+
+If you do need to use tsx watch, you can apply the following patch with `patch-package` to `node_modules\@remix-run\dev\dist\devServer_unstable\index.js` to fix the issue.
+
 
 ```js
     let newAppServer = execa.command(command, {
 -     stdio: "pipe",
-+     stdio: ['ignore', 'pipe', 'pipe'],
++     stdio: ['ignore', 'inherit', 'inherit'],
 +     shell: true,
       env: {
         NODE_ENV: "development",
@@ -54,7 +55,7 @@ patch-package `node_modules\@remix-run\dev\dist\devServer_unstable\index.js`
     });
 ```
 
- Alternatively, you can temporarily remove the tsx watch flag, `"dev:server": "tsx ./server.ts",`. However, this will prevent the dev server from auto restart when a change is made to server.ts!
+ Alternatively, you can temporarily remove the tsx watch flag, `"dev:server": "tsx ./server.ts",`. However, changes made to `server.ts` will not show up until you manually restart the server.
 
 ----
 

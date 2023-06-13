@@ -5,7 +5,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev -c \"npm run dev:server\" --no-restart",
-    "dev:server": "tsx watch --clear-screen=false --ignore \"app/**\" --ignore \"build/**\" --ignore \"node_modules/**\" ./server.ts",
+    "dev:server": "cross-env nodemon --exec 'ts-node --esm ./server.ts' --watch ./server.ts",
     "start": "cross-env NODE_ENV=production tsx ./server.ts",
     "typecheck": "tsc"
   },
@@ -26,6 +26,7 @@
   "devDependencies": {
     "@remix-run/dev": "*",
     "@remix-run/eslint-config": "*",
+    "@swc/core": "^1.3.63",
     "@types/compression": "^1.7.2",
     "@types/express": "^4.17.17",
     "@types/morgan": "^1.9.4",
@@ -33,8 +34,9 @@
     "@types/react-dom": "^18.0.11",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.38.0",
+    "nodemon": "^2.0.22",
     "tailwindcss": "^3.3.2",
-    "tsx": "^3.12.7",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },
   "engines": {
