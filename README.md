@@ -9,7 +9,9 @@ Depending on whether you're using native esm/cjs server and server.js/ts, the fo
 * tsconfig.json
 * server.ts or server.js
 
-## [Check the branches](https://github.com/xHomu/remix-v2-server/branches) to see how they differ:
+## [Check the branches for examples to your specific setup](https://github.com/xHomu/remix-v2-server/branches) 
+
+How they differ:
 
 * [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/commit/f73c6f3e2dc6f8cc60c80ecda97be68eda163e64)
 * [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/commit/ab19dd14c524fbc7eb8b1968bb9a2d9fe5e037f7)
