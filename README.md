@@ -9,12 +9,12 @@ Depending on whether you're using native esm/cjs server and server.js/ts, the fo
 * tsconfig.json
 * server.ts or server.js
 
-Check the branches to see how they differ:
+## [Check the branches](https://github.com/xHomu/remix-v2-server/branches) to see how they differ:
 
-* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.js#diff)
-* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.ts#diff)
-* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.js#diff)
-* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.ts#diff) 
+* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/cjs-server.js...v1-dev-server)
+* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/cjs-server.ts...v1-dev-server)
+* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/esm-server.js...v1-dev-server)
+* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/esm-server.ts...v1-dev-server) 
 
 For more on Remix v2 dev server, check these talks by Pedro Cattori @pcattori
 
