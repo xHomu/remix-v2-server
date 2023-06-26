@@ -12,7 +12,7 @@ Depending on whether you're using native esm/cjs server and server.js/ts, the fo
 Check the branches to see how they differ:
 
 * [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.js#diff)
-* [CommonJS + server.ts]https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.ts#diff)
+* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.ts#diff)
 * [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.js#diff)
 * [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.ts#diff) 
 
