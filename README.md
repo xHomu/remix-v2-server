@@ -11,12 +11,12 @@ Depending on whether you're using native esm/cjs server and server.js/ts, the fo
 
 ## [Check the branches](https://github.com/xHomu/remix-v2-server/branches) to see how they differ:
 
-* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/cjs-server.js...v1-dev-server)
-* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/cjs-server.ts...v1-dev-server)
-* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/esm-server.js...v1-dev-server)
-* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/esm-server.ts...v1-dev-server) 
+* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.js)
+* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.ts)
+* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.js)
+* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.ts) 
 
-For more on Remix v2 dev server, check these talks by Pedro Cattori @pcattori
+For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
 * [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
 * [EpicWeb.dev Live stream: Upgrading to Remix 1.16.0](https://www.youtube.com/watch?v=IjE18rXpp9Q)
