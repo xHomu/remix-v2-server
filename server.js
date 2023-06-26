@@ -1,7 +1,7 @@
 const path = require("path");
-const chokidar = require("chokidar");
+
 const { createRequestHandler } = require("@remix-run/express");
-const { broadcastDevReady, installGlobals } = require("@remix-run/node");
+const { installGlobals } = require("@remix-run/node");
 const compression = require("compression");
 const express = require("express");
 const morgan = require("morgan");
@@ -33,6 +33,8 @@ app.all(
   "*",
   process.env.NODE_ENV === "development"
     ? (req, res, next) => {
+        purgeRequireCache();
+
         return createRequestHandler({
           build: require(BUILD_DIR),
           mode: process.env.NODE_ENV,
@@ -47,23 +49,17 @@ const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
-
-  if (process.env.NODE_ENV === "development") {
-    broadcastDevReady(require(BUILD_DIR));
-  }
 });
 
-// during dev, we'll keep the build module up to date with the changes
-if (process.env.NODE_ENV === "development") {
-  const watcher = chokidar.watch(BUILD_DIR, {
-    ignored: ["**/**.map"],
-  });
-  watcher.on("all", () => {
-    for (const key in require.cache) {
-      if (key.startsWith(BUILD_DIR)) {
-        delete require.cache[key];
-      }
+function purgeRequireCache() {
+  // purge require cache on requests for "server side HMR" this won't let
+  // you have in-memory objects between requests in development,
+  // alternatively you can set up nodemon/pm2-dev to restart the server on
+  // file changes, but then you'll have to reconnect to databases/etc on each
+  // change. We prefer the DX of this, so we've included it for you by default
+  for (const key in require.cache) {
+    if (key.startsWith(BUILD_DIR)) {
+      delete require.cache[key];
     }
-    broadcastDevReady(require(BUILD_DIR));
-  });
+  }
 }
