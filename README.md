@@ -9,14 +9,14 @@ Depending on whether you're using native esm/cjs server and server.js/ts, the fo
 * tsconfig.json
 * server.ts or server.js
 
-Check the branches to see how they differ:
+## [Check the branches](https://github.com/xHomu/remix-v2-server/branches) to see how they differ:
 
-* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.js)
-* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.ts)
-* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/main...esm-server.js)
-* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server) (you are here)
+* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.js)
+* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.ts)
+* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.js)
+* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.ts) 
 
-For more on Remix v2 dev server, check these talks by Pedro Cattori @pcattori
+For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
 * [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
 * [EpicWeb.dev Live stream: Upgrading to Remix 1.16.0](https://www.youtube.com/watch?v=IjE18rXpp9Q)
@@ -24,24 +24,25 @@ For more on Remix v2 dev server, check these talks by Pedro Cattori @pcattori
 
 ## Troubleshooting
 
-Dev Server bugs with Remix v1.16.1 to watch out for:
-
 ### Syntax Error causes dev server to crash
 
 * Reference https://github.com/remix-run/remix/pull/6467 
 
-The fix is introduced to the nightly build.
+This is fixed in v1.17.0+.
 
 ### `tsx watch` fails to start on Windows
 
-* Reference https://github.com/remix-run/remix/issues/6504
+* Reference https://github.com/remix-run/remix/pull/6538
 
-patch-package `node_modules\@remix-run\dev\dist\devServer_unstable\index.js`
+Due to upstream `tsx watch` bug, we would use `ts-node` with `nodemon --watch` instead. 
+
+If you do need to use tsx watch, you will need to patch `node_modules\@remix-run\dev\dist\devServer_unstable\index.js` with something like `patch-package` to fix the issue:
+
 
 ```js
     let newAppServer = execa.command(command, {
 -     stdio: "pipe",
-+     stdio: ['ignore', 'pipe', 'pipe'],
++     stdio: ['ignore', 'inherit', 'inherit'],
 +     shell: true,
       env: {
         NODE_ENV: "development",
@@ -54,7 +55,10 @@ patch-package `node_modules\@remix-run\dev\dist\devServer_unstable\index.js`
     });
 ```
 
- Alternatively, you can temporarily remove the tsx watch flag, `"dev:server": "tsx ./server.ts",`. However, this will prevent the dev server from auto restart when a change is made to server.ts!
+ Alternatively, you can do without the watch flag, `"dev:server": "tsx ./server.ts",`. However, changes made to `server.ts` will not show until you manually reboot the server.
+
+* See also: [tsx workaround on Epic Stack](https://github.com/epicweb-dev/epic-stack/blob/main/server/dev-server.js)
+
 
 ----
 
