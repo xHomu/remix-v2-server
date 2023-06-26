@@ -1,14 +1,17 @@
-const path = require("path");
+import * as fs from "node:fs";
+import chokidar from "chokidar";
+import express from "express";
+import compression from "compression";
+import morgan from "morgan";
+import { createRequestHandler } from "@remix-run/express";
+import { broadcastDevReady, installGlobals } from "@remix-run/node";
 
-const { createRequestHandler } = require("@remix-run/express");
-const { installGlobals } = require("@remix-run/node");
-const compression = require("compression");
-const express = require("express");
-const morgan = require("morgan");
+import * as build from "./build/index.js";
+let devBuild = build;
+
+const BUILD_PATH = "./build/index.js";
 
 installGlobals();
-
-const BUILD_DIR = path.join(process.cwd(), "build");
 
 const app = express();
 
@@ -33,33 +36,40 @@ app.all(
   "*",
   process.env.NODE_ENV === "development"
     ? (req, res, next) => {
-        purgeRequireCache();
-
-        return createRequestHandler({
-          build: require(BUILD_DIR),
-          mode: process.env.NODE_ENV,
-        })(req, res, next);
+        try {
+          return createRequestHandler({
+            build: devBuild,
+            mode: "development",
+          })(req, res, next);
+        } catch (error) {
+          next(error);
+        }
       }
     : createRequestHandler({
-        build: require(BUILD_DIR),
+        build,
         mode: process.env.NODE_ENV,
       })
 );
+
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Express server listening on port ${port}`);
+
+  if (process.env.NODE_ENV === "development") {
+    broadcastDevReady(build);
+  }
 });
 
-function purgeRequireCache() {
-  // purge require cache on requests for "server side HMR" this won't let
-  // you have in-memory objects between requests in development,
-  // alternatively you can set up nodemon/pm2-dev to restart the server on
-  // file changes, but then you'll have to reconnect to databases/etc on each
-  // change. We prefer the DX of this, so we've included it for you by default
-  for (const key in require.cache) {
-    if (key.startsWith(BUILD_DIR)) {
-      delete require.cache[key];
-    }
-  }
+// during dev, we'll keep the build module up to date with the changes
+if (process.env.NODE_ENV === "development") {
+  const watcher = chokidar.watch(BUILD_PATH, { ignoreInitial: true });
+
+  watcher.on("all", async () => {
+    // 1. purge require cache && load updated server build
+    const stat = fs.statSync(BUILD_PATH);
+    devBuild = await import(BUILD_PATH + "?t=" + stat.mtimeMs);
+    // 2. tell dev server that this app server is now ready
+    broadcastDevReady(devBuild);
+  });
 }
