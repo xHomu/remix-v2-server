@@ -1,4 +1,5 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from 'tailwindcss'
+
 module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}"],
   theme: {
@@ -6,6 +7,7 @@ module.exports = {
   },
   plugins: [],
   corePlugins: {
-    preflight: false,
-  },
-};
+  preflight: false,
+  }
+} satisfies Config
+
