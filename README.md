@@ -11,10 +11,10 @@ Depending on whether you're using native esm/cjs server and server.js/ts, the fo
 
 Check the branches to see how they differ:
 
-* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.js)
-* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/main...cjs-server.ts)
-* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/main...esm-server.js)
-* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server) (you are here)
+* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.js#diff)
+* [CommonJS + server.ts]https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.ts#diff
+* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.js#diff)
+* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.ts#diff) 
 
 For more on Remix v2 dev server, check these talks by Pedro Cattori @pcattori
 
@@ -34,9 +34,9 @@ This is fixed in v1.17.0+.
 
 * Reference https://github.com/remix-run/remix/pull/6538
 
-Due to upstream `tsx watch` bug, we would use `ts-node` instead. 
+Due to upstream `tsx watch` bug, we would use `ts-node` with `nodemon --watch` instead. 
 
-If you do need to use tsx watch, you can apply the following patch with `patch-package` to `node_modules\@remix-run\dev\dist\devServer_unstable\index.js` to fix the issue.
+If you do need to use tsx watch, you will need to patch `node_modules\@remix-run\dev\dist\devServer_unstable\index.js` with something like `patch-package` to fix the issue:
 
 
 ```js
@@ -55,7 +55,10 @@ If you do need to use tsx watch, you can apply the following patch with `patch-p
     });
 ```
 
- Alternatively, you can temporarily remove the tsx watch flag, `"dev:server": "tsx ./server.ts",`. However, changes made to `server.ts` will not show up until you manually restart the server.
+ Alternatively, you can do without the watch flag, `"dev:server": "tsx ./server.ts",`. However, changes made to `server.ts` will not show until you manually reboot the server.
+
+* See also: [tsx workaround on Epic Stack](https://github.com/epicweb-dev/epic-stack/blob/main/server/dev-server.js)
+
 
 ----
 
