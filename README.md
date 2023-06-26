@@ -11,10 +11,10 @@ Depending on whether you're using native esm/cjs server and server.js/ts, the fo
 
 ## [Check the branches](https://github.com/xHomu/remix-v2-server/branches) to see how they differ:
 
-* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.js)
-* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.ts)
-* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.js)
-* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.ts) 
+* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/commit/f73c6f3e2dc6f8cc60c80ecda97be68eda163e64)
+* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/commit/ab19dd14c524fbc7eb8b1968bb9a2d9fe5e037f7)
+* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/commit/8119a735e73b0716cbaeab53dac5adf58d14278e)
+* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/commit/d4993e73f5d6a28291bf120364f93210eddbb516)
 
 For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
