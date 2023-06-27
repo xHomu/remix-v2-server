@@ -20,6 +20,7 @@ How they differ:
 
 For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
+* [Remix v2 Dev Server Docs](https://remix.run/docs/en/main/other-api/dev-v2)
 * [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
 * [EpicWeb.dev Live stream: Upgrading to Remix 1.16.0](https://www.youtube.com/watch?v=IjE18rXpp9Q)
 
