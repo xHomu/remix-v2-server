@@ -9,15 +9,18 @@ Depending on whether you're using native esm/cjs server and server.js/ts, the fo
 * tsconfig.json
 * server.ts or server.js
 
-## [Check the branches](https://github.com/xHomu/remix-v2-server/branches) to see how they differ:
+## [Check the branches for examples to your specific setup](https://github.com/xHomu/remix-v2-server/branches) 
 
-* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.js)
-* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...cjs-server.ts)
-* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.js)
-* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/compare/v1-dev-server...esm-server.ts) 
+How they differ:
+
+* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/commit/f73c6f3e2dc6f8cc60c80ecda97be68eda163e64)
+* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/commit/ab19dd14c524fbc7eb8b1968bb9a2d9fe5e037f7)
+* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/commit/8119a735e73b0716cbaeab53dac5adf58d14278e)
+* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/commit/d4993e73f5d6a28291bf120364f93210eddbb516)
 
 For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
+* [Remix v2 Dev Server Docs](https://remix.run/docs/en/main/other-api/dev-v2)
 * [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
 * [EpicWeb.dev Live stream: Upgrading to Remix 1.16.0](https://www.youtube.com/watch?v=IjE18rXpp9Q)
 
