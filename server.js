@@ -29,6 +29,7 @@ app.use(express.static("public", { maxAge: "1h" }));
 
 app.use(morgan("tiny"));
 
+// Check if the server is running in development mode and reflect realtime changes in the codebase.
 app.all(
   "*",
   process.env.NODE_ENV === "development"
@@ -54,16 +55,22 @@ app.listen(port, () => {
 });
 
 // during dev, we'll keep the build module up to date with the changes
+async function updateServer() {
+  // 1. purge require cache && load updated server build
+  for (const key in require.cache) {
+    if (key.startsWith(BUILD_DIR)) {
+      delete require.cache[key];
+    }
+  }
+  // 2. tell dev server that this app server is now ready
+  broadcastDevReady(require(BUILD_DIR));
+}
+
 if (process.env.NODE_ENV === "development") {
   const watcher = chokidar.watch(BUILD_DIR, {
     ignored: ["**/**.map"],
   });
-  watcher.on("all", () => {
-    for (const key in require.cache) {
-      if (key.startsWith(BUILD_DIR)) {
-        delete require.cache[key];
-      }
-    }
-    broadcastDevReady(require(BUILD_DIR));
-  });
+
+  watcher.on("add", updateServer);
+  watcher.on("change", updateServer);
 }
