@@ -6,12 +6,12 @@ import morgan from "morgan";
 import { createRequestHandler, type RequestHandler } from "@remix-run/express";
 import { broadcastDevReady, installGlobals } from "@remix-run/node";
 
+// patch in Remix runtime globals
 installGlobals();
 
 /**
  * @typedef {import('@remix-run/node').ServerBuild} ServerBuild
  */
-
 const BUILD_PATH = "./build/index.js";
 
 /**
