@@ -96,6 +96,7 @@ async function reimportServer() {
   // 1. manually remove the server build from the require cache
   Object.keys(require.cache).forEach((key) => {
     if (key.startsWith(BUILD_PATH)) {
+      delete require.cache[key];
     }
   });
 
