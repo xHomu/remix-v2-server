@@ -1,6 +1,6 @@
 import type { Config } from "postcss-load-config";
 
-module.exports = {
+export default {
   plugins: {
     autoprefixer: {},
   },
