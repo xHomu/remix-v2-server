@@ -1,5 +1,5 @@
 {
-	"include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "server.js"],
+	"include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
 	"compilerOptions": {
 		"lib": ["DOM", "DOM.Iterable", "ES2019"],
 		"isolatedModules": true,
@@ -17,5 +17,8 @@
 		},
 		// Remix takes care of building everything in `remix build`.
 		"noEmit": true
+	},
+	"ts-node": {
+		"swc": true
 	}
 }
