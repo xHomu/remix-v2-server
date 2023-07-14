@@ -1,14 +1,24 @@
-const path = require("path");
+const path = require("node:path");
 const chokidar = require("chokidar");
+const express = require("express");
+const compression = require("compression");
+const morgan = require("morgan");
 const { createRequestHandler } = require("@remix-run/express");
 const { broadcastDevReady, installGlobals } = require("@remix-run/node");
-const compression = require("compression");
-const express = require("express");
-const morgan = require("morgan");
 
+// patch in Remix runtime globals
 installGlobals();
 
-const BUILD_DIR = path.join(process.cwd(), "build");
+/**
+ * @typedef {import('@remix-run/node').ServerBuild} ServerBuild
+ */
+const BUILD_PATH = path.resolve("./build/index.js");
+
+/**
+ * Initial build
+ * @type {ServerBuild}
+ */
+let build = require(BUILD_PATH);
 
 const app = express();
 
@@ -29,48 +39,67 @@ app.use(express.static("public", { maxAge: "1h" }));
 
 app.use(morgan("tiny"));
 
-// Check if the server is running in development mode and reflect realtime changes in the codebase.
+// Check if the server is running in development mode and use the devBuild to reflect realtime changes in the codebase.
 app.all(
   "*",
   process.env.NODE_ENV === "development"
-    ? (req, res, next) => {
-        return createRequestHandler({
-          build: require(BUILD_DIR),
-          mode: process.env.NODE_ENV,
-        })(req, res, next);
-      }
+    ? createDevRequestHandler()
     : createRequestHandler({
-        build: require(BUILD_DIR),
+        build,
         mode: process.env.NODE_ENV,
       })
 );
+
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Express server listening on port ${port}`);
 
+  // send "ready" message to dev server
   if (process.env.NODE_ENV === "development") {
-    broadcastDevReady(require(BUILD_DIR));
+    broadcastDevReady(build);
   }
 });
 
-// during dev, we'll keep the build module up to date with the changes
-async function updateServer() {
-  // 1. purge require cache && load updated server build
-  for (const key in require.cache) {
-    if (key.startsWith(BUILD_DIR)) {
-      delete require.cache[key];
-    }
+// Create a request handler that watches for changes to the server build during development.
+function createDevRequestHandler() {
+  async function handleServerUpdate() {
+    // 1. re-import the server build
+    build = await reimportServer();
+    // 2. tell dev server that this app server is now up-to-date and ready
+    broadcastDevReady(build);
   }
-  // 2. tell dev server that this app server is now ready
-  broadcastDevReady(require(BUILD_DIR));
+
+  chokidar
+    .watch(BUILD_PATH, { ignoreInitial: true })
+    .on("add", handleServerUpdate)
+    .on("change", handleServerUpdate);
+
+  // wrap request handler to make sure its recreated with the latest build for every request
+  return async (req, res, next) => {
+    try {
+      return createRequestHandler({
+        build,
+        mode: "development",
+      })(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
-if (process.env.NODE_ENV === "development") {
-  const watcher = chokidar.watch(BUILD_DIR, {
-    ignored: ["**/**.map"],
+// CJS require cache busting
+/**
+ * @type {() => Promise<ServerBuild>}
+ */
+async function reimportServer() {
+  // 1. manually remove the server build from the require cache
+  Object.keys(require.cache).forEach((key) => {
+    if (key.startsWith(BUILD_PATH)) {
+      delete require.cache[key];
+    }
   });
 
-  watcher.on("add", updateServer);
-  watcher.on("change", updateServer);
+  // 2. re-import the server build
+  return require(BUILD_PATH);
 }
