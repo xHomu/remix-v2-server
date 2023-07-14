@@ -1,24 +1,14 @@
-const path = require("node:path");
-const chokidar = require("chokidar");
-const express = require("express");
-const compression = require("compression");
-const morgan = require("morgan");
-const { createRequestHandler } = require("@remix-run/express");
-const { broadcastDevReady, installGlobals } = require("@remix-run/node");
+const path = require("path");
 
-// patch in Remix runtime globals
+const { createRequestHandler } = require("@remix-run/express");
+const { installGlobals } = require("@remix-run/node");
+const compression = require("compression");
+const express = require("express");
+const morgan = require("morgan");
+
 installGlobals();
 
-/**
- * @typedef {import('@remix-run/node').ServerBuild} ServerBuild
- */
-const BUILD_PATH = path.resolve("./build/index.js");
-
-/**
- * Initial build
- * @type {ServerBuild}
- */
-let build = require(BUILD_PATH);
+const BUILD_DIR = path.join(process.cwd(), "build");
 
 const app = express();
 
@@ -39,67 +29,37 @@ app.use(express.static("public", { maxAge: "1h" }));
 
 app.use(morgan("tiny"));
 
-// Check if the server is running in development mode and use the devBuild to reflect realtime changes in the codebase.
 app.all(
   "*",
   process.env.NODE_ENV === "development"
-    ? createDevRequestHandler()
+    ? (req, res, next) => {
+        purgeRequireCache();
+
+        return createRequestHandler({
+          build: require(BUILD_DIR),
+          mode: process.env.NODE_ENV,
+        })(req, res, next);
+      }
     : createRequestHandler({
-        build,
+        build: require(BUILD_DIR),
         mode: process.env.NODE_ENV,
       })
 );
-
 const port = process.env.PORT || 3000;
 
-app.listen(port, async () => {
+app.listen(port, () => {
   console.log(`Express server listening on port ${port}`);
-
-  // send "ready" message to dev server
-  if (process.env.NODE_ENV === "development") {
-    broadcastDevReady(build);
-  }
 });
 
-// Create a request handler that watches for changes to the server build during development.
-function createDevRequestHandler() {
-  async function handleServerUpdate() {
-    // 1. re-import the server build
-    build = await reimportServer();
-    // 2. tell dev server that this app server is now up-to-date and ready
-    broadcastDevReady(build);
-  }
-
-  chokidar
-    .watch(BUILD_PATH, { ignoreInitial: true })
-    .on("add", handleServerUpdate)
-    .on("change", handleServerUpdate);
-
-  // wrap request handler to make sure its recreated with the latest build for every request
-  return async (req, res, next) => {
-    try {
-      return createRequestHandler({
-        build,
-        mode: "development",
-      })(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  };
-}
-
-// CJS require cache busting
-/**
- * @type {() => Promise<ServerBuild>}
- */
-async function reimportServer() {
-  // 1. manually remove the server build from the require cache
-  Object.keys(require.cache).forEach((key) => {
-    if (key.startsWith(BUILD_PATH)) {
+function purgeRequireCache() {
+  // purge require cache on requests for "server side HMR" this won't let
+  // you have in-memory objects between requests in development,
+  // alternatively you can set up nodemon/pm2-dev to restart the server on
+  // file changes, but then you'll have to reconnect to databases/etc on each
+  // change. We prefer the DX of this, so we've included it for you by default
+  for (const key in require.cache) {
+    if (key.startsWith(BUILD_DIR)) {
       delete require.cache[key];
     }
-  });
-
-  // 2. re-import the server build
-  return require(BUILD_PATH);
+  }
 }
