@@ -38,8 +38,8 @@ Make sure you're using `v2_dev: true` instead of `unstable_dev: true` when using
 
 To maintain Windows compatibility, escape the quotation marks in package.json script:
 
-- ❌ `"dev": "remix dev -c 'npm run dev:server' --no-restart",`
-- ✅ ` "dev": "remix dev -c \"npm run dev:server\" --no-restart",`
+- ❌ `"dev": "remix dev -c 'npm run dev:server' --manual",`
+- ✅ ` "dev": "remix dev -c \"npm run dev:server\" --manual",`
 
 ### `tsx watch` fails to start on Windows
 
