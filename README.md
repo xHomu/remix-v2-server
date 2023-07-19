@@ -13,10 +13,10 @@ Depending on whether you're using native esm/cjs server and server.js/ts, the fo
 
 How they differ:
 
-- [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/commit/f73c6f3e2dc6f8cc60c80ecda97be68eda163e64)
-- [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/commit/ab19dd14c524fbc7eb8b1968bb9a2d9fe5e037f7)
-- [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/commit/8119a735e73b0716cbaeab53dac5adf58d14278e)
-- [ES Modules + server.ts](https://github.com/xHomu/remix-v2-server/commit/d4993e73f5d6a28291bf120364f93210eddbb516)
+- [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/commit/84d154ce632ec7e645bb7d48d7b4c0c3f2531ec5)
+- [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/commit/23f6e1ad2affc54d475699f0786a4b07022dc8c4)
+- [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/commit/53e50ee38af0e9de67f7178b567cd52f90007ae6)
+- [ES Modules + server.ts](https://github.com/xHomu/remix-v2-server/commit/8519b1f4763ed59ee4be74de00d761d4c899e4b8)
 
 For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
