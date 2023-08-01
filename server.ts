@@ -1,5 +1,4 @@
 import * as fs from "node:fs";
-import chokidar from "chokidar";
 import express from "express";
 import compression from "compression";
 import morgan from "morgan";
@@ -19,6 +18,10 @@ const BUILD_PATH = "./build/index.js";
  * @type {ServerBuild}
  */
 let build = await import(BUILD_PATH);
+
+// We'll make chokidar a dev dependency so it doesn't get bundled in production.
+const chokidar =
+  process.env.NODE_ENV === "development" ? await import("chokidar") : null;
 
 const app = express();
 
