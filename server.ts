@@ -19,11 +19,11 @@ const BUILD_PATH = "./build/index.js";
  */
 let build = await import(BUILD_PATH);
 
-const app = express();
-
 // We'll make chokidar a dev dependency so it doesn't get bundled in production.
 const chokidar =
   process.env.NODE_ENV === "development" ? await import("chokidar") : null;
+
+const app = express();
 
 app.use(compression());
 
