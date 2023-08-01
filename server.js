@@ -1,5 +1,4 @@
 const path = require("node:path");
-const chokidar = require("chokidar");
 const express = require("express");
 const compression = require("compression");
 const morgan = require("morgan");
@@ -19,6 +18,10 @@ const BUILD_PATH = path.resolve("./build/index.js");
  * @type {ServerBuild}
  */
 let build = require(BUILD_PATH);
+
+// We'll make chokidar a dev dependency so it doesn't get bundled in production.
+const chokidar =
+  process.env.NODE_ENV === "development" ? require("chokidar") : null;
 
 const app = express();
 
