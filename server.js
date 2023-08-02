@@ -4,9 +4,11 @@ const compression = require("compression");
 const morgan = require("morgan");
 const { createRequestHandler } = require("@remix-run/express");
 const { broadcastDevReady, installGlobals } = require("@remix-run/node");
+const sourceMapSupport = require("source-map-support");
 
 // patch in Remix runtime globals
 installGlobals();
+sourceMapSupport.install();
 
 /**
  * @typedef {import('@remix-run/node').ServerBuild} ServerBuild
