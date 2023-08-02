@@ -4,9 +4,11 @@ import compression from "compression";
 import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
 import { broadcastDevReady, installGlobals } from "@remix-run/node";
+import sourceMapSupport from "source-map-support";
 
 // patch in Remix runtime globals
 installGlobals();
+sourceMapSupport.install();
 
 /**
  * @typedef {import('@remix-run/node').ServerBuild} ServerBuild
