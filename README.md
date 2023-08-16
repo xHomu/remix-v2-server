@@ -28,7 +28,9 @@ For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
 ### [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for ... "/server.ts"
 
-This is actually a Node 20 bug, downgrade to Node 18 should fix it.
+This is actually a Node 20 bug, downgrade to Node 18 should fix it. 
+
+* See https://github.com/TypeStrong/ts-node/issues/1997 for issue status
 
 ### [ERR_REQUIRE_ESM]: require() of ES Module after update
 
