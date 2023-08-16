@@ -26,6 +26,10 @@ For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
 ## Troubleshooting
 
+### [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for ... "/server.ts"
+
+This is actually a Node 20 bug, downgrade to Node 18 should fix it.
+
 ### [ERR_REQUIRE_ESM]: require() of ES Module after update
 
 ### Remix serve cannot be found
