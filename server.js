@@ -84,10 +84,7 @@ function createDevRequestHandler() {
   }
 
   chokidar
-    .watch(WATCH_PATH, {
-      // Chokidar settings to avoid certain race condition issues #6831
-      ignoreInitial: true,
-    })
+    .watch(WATCH_PATH, { ignoreInitial: true })
     .on("add", handleServerUpdate)
     .on("change", handleServerUpdate);
 
