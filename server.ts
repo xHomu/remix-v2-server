@@ -14,7 +14,7 @@ sourceMapSupport.install();
  * @typedef {import('@remix-run/node').ServerBuild} ServerBuild
  */
 const BUILD_PATH = "./build/index.js";
-const WATCH_PATH = "./build/metafile.server.json";
+const WATCH_PATH = "./build/version.txt";
 
 /**
  * Initial build
@@ -86,8 +86,6 @@ function createDevRequestHandler(): RequestHandler {
   chokidar
     .watch(WATCH_PATH, {
       ignoreInitial: true,
-      // Chokidar settings to avoid certain race condition issues #6831
-      awaitWriteFinish: { stabilityThreshold: 200 },
     })
     .on("add", handleServerUpdate)
     .on("change", handleServerUpdate);
