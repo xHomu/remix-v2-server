@@ -1,69 +1,81 @@
-An sample repo for setting up the new Remix v2 dev server, which offers better development experience and HMR/HDR support.
+## `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.js`
 
 ---
 
-Depending on whether you're using native esm/cjs server and server.js/ts, the following files needs to be adjusted:
+Use the following commands to quickly start a Remix v2 app with a basic Express server:
 
-* package.json
-* remix.config.js
-* tsconfig.json
-* server.ts or server.js
+- [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/tree/cjs-server.js): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.js`
+- [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts`
+- [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/tree/esm-server.js): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/esm-server.js`
+- [ES Modules + server.ts](https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts`
 
-## [Check the branches for examples to your specific setup](https://github.com/xHomu/remix-v2-server/branches) 
+---
 
-How they differ:
+If updating from a v1 Remix app, the following files probably needs to be adjusted:
 
-* [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/commit/f73c6f3e2dc6f8cc60c80ecda97be68eda163e64)
-* [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/commit/ab19dd14c524fbc7eb8b1968bb9a2d9fe5e037f7)
-* [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/commit/8119a735e73b0716cbaeab53dac5adf58d14278e)
-* [ES Modules  + server.ts](https://github.com/xHomu/remix-v2-server/commit/d4993e73f5d6a28291bf120364f93210eddbb516)
+- package.json
+- remix.config.js
+- tsconfig.json
+- server.ts or server.js
+
+What changes will depend on whether your repo is ESM/CJS, and whether you're using a typescript or javascript server:
+
+- [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/afb226b3e55f3f0d7f6dce0af0252df57fda186f..cjs-server.js)
+- [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/f775b2caf405834176cbd76c400f74f45a88e99b..cjs-server.ts)
+- [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/8119a735e73b0716cbaeab53dac5adf58d14278e..esm-server.js)
+- [ES Modules + server.ts](https://github.com/xHomu/remix-v2-server/compare/8fd862f9d23ea308d7359e0917e6aa1e4a1ef691..esm-server.ts)
 
 For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
-* [Remix v2 Dev Server Docs](https://remix.run/docs/en/main/other-api/dev-v2)
-* [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
-* [EpicWeb.dev Live stream: Upgrading to Remix 1.16.0](https://www.youtube.com/watch?v=IjE18rXpp9Q)
-
+- [Remix v2 Dev Server Docs](https://remix.run/docs/en/main/other-api/dev-v2)
+- [Migrating your project to v2_dev](https://www.youtube.com/watch?v=6jTL8GGbIuc)
+- [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
 
 ## Troubleshooting
 
-### Syntax Error causes dev server to crash
+### [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for ... "/server.ts"
 
-* Reference https://github.com/remix-run/remix/pull/6467 
+This is actually a Node 20 bug, downgrade to Node 18 should fix it.
 
-This is fixed in v1.17.0+.
+- See https://github.com/TypeStrong/ts-node/issues/1997 for issue status
+
+### [ERR_REQUIRE_ESM]: require() of ES Module after update
+
+### Remix serve cannot be found
+
+This occurs because you're accidentally using the built-in RAS instead of of a custom Express server.js/ts.
+
+Make sure you're using `v2_dev: true` instead of `unstable_dev: true` when using Remix v1.18+.
+
+### "Error: package.json not found at PackageJson.load"
+
+To maintain Windows compatibility, escape the quotation marks in package.json script:
+
+- ❌ `"dev": "remix dev -c 'npm run dev:server' --manual",`
+- ✅ ` "dev": "remix dev -c \"npm run dev:server\" --manual",`
 
 ### `tsx watch` fails to start on Windows
 
-* Reference https://github.com/remix-run/remix/pull/6538
+- Reference https://github.com/remix-run/remix/pull/6538
 
-Due to upstream `tsx watch` bug, we would use `ts-node` with `nodemon --watch` instead. 
+Due to upstream an `tsx watch` bug, use `ts-node` and `nodemon --watch` instead.
 
-If you do need to use tsx watch, you will need to patch `node_modules\@remix-run\dev\dist\devServer_unstable\index.js` with something like `patch-package` to fix the issue:
-
+If you prefer `tsx watch`, you will need to patch `node_modules\@remix-run\dev\dist\devServer_unstable\index.js` with `patch-package` to fix the issue:
 
 ```js
     let newAppServer = execa.command(command, {
 -     stdio: "pipe",
 +     stdio: ['ignore', 'inherit', 'inherit'],
 +     shell: true,
-      env: {
-        NODE_ENV: "development",
-        PATH:
-          bin + (process.platform === "win32" ? ";" : ":") + process.env.PATH,
-        REMIX_DEV_HTTP_ORIGIN: stringifyOrigin(httpOrigin),
-      },
-      // https://github.com/sindresorhus/execa/issues/433
-      windowsHide: false,
-    });
 ```
 
- Alternatively, you can do without the watch flag, `"dev:server": "tsx ./server.ts",`. However, changes made to `server.ts` will not show until you manually reboot the server.
+Alternatively, you can use `tsx` without the watch flag: `"dev:server": "tsx ./server.ts",`.
 
-* See also: [tsx workaround on Epic Stack](https://github.com/epicweb-dev/epic-stack/blob/main/server/dev-server.js)
+Beware that without `tsx watch`, changes to `server.ts` will not appear until you manually reboot the server.
 
+- See also: [tsx workaround on Epic Stack](https://github.com/epicweb-dev/epic-stack/blob/main/server/dev-server.js)
 
-----
+---
 
 # Welcome to Remix!
 
