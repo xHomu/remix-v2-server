@@ -1,6 +1,8 @@
 Learn more about [Remix Templates](https://remix.run/docs/en/main/guides/templates):
 
-`npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/esm-server.ts`
+```sh
+npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/esm-server.ts
+```
 
 ---
 
