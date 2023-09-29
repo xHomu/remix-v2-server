@@ -1,22 +1,33 @@
-An sample repo for setting up the new Remix v2 dev server, which offers better development experience and HMR/HDR support.
+Learn more about [Remix Templates](https://remix.run/docs/en/main/guides/templates):
+
+```sh
+npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/esm-server.js
+```
 
 ---
 
-Depending on whether you're using native esm/cjs server and server.js/ts, the following files needs to be adjusted:
+Use the following commands to quickly start a Remix v2 app with a basic Express server:
+
+- [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/tree/cjs-server.js): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.js`
+- [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts`
+- [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/tree/esm-server.js): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/esm-server.js`
+- [ES Modules + server.ts](https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts`
+
+---
+
+If updating from a v1 Remix app, the following files probably needs to be adjusted:
 
 - package.json
 - remix.config.js
 - tsconfig.json
 - server.ts or server.js
 
-## For examples specific to your setup, [check the branches here](https://github.com/xHomu/remix-v2-server/branches).
+What changes will depend on whether your repo is ESM/CJS, and whether you're using a typescript or javascript server:
 
-How they differ:
-
-- [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/commit/f73c6f3e2dc6f8cc60c80ecda97be68eda163e64)
-- [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/commit/ab19dd14c524fbc7eb8b1968bb9a2d9fe5e037f7)
-- [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/commit/8119a735e73b0716cbaeab53dac5adf58d14278e)
-- [ES Modules + server.ts](https://github.com/xHomu/remix-v2-server/commit/d4993e73f5d6a28291bf120364f93210eddbb516)
+- [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/compare/afb226b3e55f3f0d7f6dce0af0252df57fda186f..cjs-server.js)
+- [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/compare/f775b2caf405834176cbd76c400f74f45a88e99b..cjs-server.ts)
+- [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/compare/8119a735e73b0716cbaeab53dac5adf58d14278e..esm-server.js)
+- [ES Modules + server.ts](https://github.com/xHomu/remix-v2-server/compare/8fd862f9d23ea308d7359e0917e6aa1e4a1ef691..esm-server.ts)
 
 For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 
@@ -25,6 +36,12 @@ For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 - [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
 
 ## Troubleshooting
+
+### [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for ... "/server.ts"
+
+This is actually a Node 20 bug, downgrade to Node 18 should fix it.
+
+- See https://github.com/TypeStrong/ts-node/issues/1997 for issue status
 
 ### [ERR_REQUIRE_ESM]: require() of ES Module after update
 
@@ -38,8 +55,8 @@ Make sure you're using `v2_dev: true` instead of `unstable_dev: true` when using
 
 To maintain Windows compatibility, escape the quotation marks in package.json script:
 
-- ❌ `"dev": "remix dev -c 'npm run dev:server' --no-restart",`
-- ✅ ` "dev": "remix dev -c \"npm run dev:server\" --no-restart",`
+- ❌ `"dev": "remix dev -c 'npm run dev:server' --manual",`
+- ✅ ` "dev": "remix dev -c \"npm run dev:server\" --manual",`
 
 ### `tsx watch` fails to start on Windows
 
