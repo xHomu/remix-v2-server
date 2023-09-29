@@ -1,4 +1,6 @@
-## `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.js`
+Learn more about [Remix Templates](https://remix.run/docs/en/main/guides/templates):
+
+`npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.js`
 
 ---
 
