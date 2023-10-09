@@ -5,8 +5,8 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev -c \"npm run dev:server\" --manual",
-    "dev:server": "node --experimental-specifier-resolution=node --loader ts-node/esm --watch ./server.ts",
-    "start": "cross-env NODE_ENV=production node --experimental-specifier-resolution=node --loader ts-node/esm ./server.ts",
+    "dev:server": "node --loader ts-node/esm --watch ./server.ts",
+    "start": "cross-env NODE_ENV=production node --loader ts-node/esm ./server.ts",
     "typecheck": "tsc"
   },
   "dependencies": {
