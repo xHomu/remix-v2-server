@@ -4,7 +4,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev -c \"npm run dev:server\" --manual",
-    "dev:server": "cross-env nodemon --exec 'ts-node --require dotenv/config ./server.ts' --watch ./server.ts",
+    "dev:server": "node -r ts-node/register --require dotenv/config --watch ./server.ts",
     "start": "cross-env NODE_ENV=production ts-node ./server.ts",
     "typecheck": "tsc"
   },
