@@ -5,7 +5,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev -c \"npm run dev:node\" --manual",
-    "dev:node": "node --require dotenv/config --watch ./server.js",
+    "dev:node": "node  --watch-path ./server.js --watch ./server.js",
     "start": "cross-env NODE_ENV=production node ./server.js",
     "typecheck": "tsc"
   },
