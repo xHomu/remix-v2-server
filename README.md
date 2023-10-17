@@ -20,7 +20,7 @@ If updating from a v1 Remix app, the following files probably needs to be adjust
 - package.json
 - remix.config.js
 - tsconfig.json
-- server.ts or server.js
+- server.js
 
 What changes will depend on whether your repo is ESM/CJS, and whether you're using a typescript or javascript server:
 
@@ -34,50 +34,6 @@ For more on Remix v2 dev server, check these talks by @pcattori Pedro Cattori!
 - [Remix v2 Dev Server Docs](https://remix.run/docs/en/main/other-api/dev-v2)
 - [Migrating your project to v2_dev](https://www.youtube.com/watch?v=6jTL8GGbIuc)
 - [Next gen HMR in Remix](https://www.youtube.com/watch?v=79M4vYZi-po)
-
-## Troubleshooting
-
-### [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for ... "/server.ts"
-
-This is actually a Node 20 bug, downgrade to Node 18 should fix it.
-
-- See https://github.com/TypeStrong/ts-node/issues/1997 for issue status
-
-### [ERR_REQUIRE_ESM]: require() of ES Module after update
-
-### Remix serve cannot be found
-
-This occurs because you're accidentally using the built-in RAS instead of of a custom Express server.js/ts.
-
-Make sure you're using `v2_dev: true` instead of `unstable_dev: true` when using Remix v1.18+.
-
-### "Error: package.json not found at PackageJson.load"
-
-To maintain Windows compatibility, escape the quotation marks in package.json script:
-
-- ❌ `"dev": "remix dev -c 'npm run dev:server' --manual",`
-- ✅ ` "dev": "remix dev -c \"npm run dev:server\" --manual",`
-
-### `tsx watch` fails to start on Windows
-
-- Reference https://github.com/remix-run/remix/pull/6538
-
-Due to upstream an `tsx watch` bug, use `ts-node` and `nodemon --watch` instead.
-
-If you prefer `tsx watch`, you will need to patch `node_modules\@remix-run\dev\dist\devServer_unstable\index.js` with `patch-package` to fix the issue:
-
-```js
-    let newAppServer = execa.command(command, {
--     stdio: "pipe",
-+     stdio: ['ignore', 'inherit', 'inherit'],
-+     shell: true,
-```
-
-Alternatively, you can use `tsx` without the watch flag: `"dev:server": "tsx ./server.ts",`.
-
-Beware that without `tsx watch`, changes to `server.ts` will not appear until you manually reboot the server.
-
-- See also: [tsx workaround on Epic Stack](https://github.com/epicweb-dev/epic-stack/blob/main/server/dev-server.js)
 
 ---
 
