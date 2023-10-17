@@ -6,3 +6,5 @@ node_modules
 /public/build
 .env
 yarn.lock
+/server.js
+package-lock.json
