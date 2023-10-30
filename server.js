@@ -84,7 +84,7 @@ function createDevRequestHandler() {
   }
 
   chokidar
-    .watch(WATCH_PATH, { ignoreInitial: true })
+    ?.watch(WATCH_PATH, { ignoreInitial: true })
     .on("add", handleServerUpdate)
     .on("change", handleServerUpdate);
 
