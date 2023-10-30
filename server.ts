@@ -1,13 +1,14 @@
 import express from "express";
 import compression from "compression";
 import morgan from "morgan";
-import { createRequestHandler, type RequestHandler } from "@remix-run/express";
-import { broadcastDevReady, installGlobals } from "@remix-run/node";
 import sourceMapSupport from "source-map-support";
+
 import {
   unstable_createViteServer,
   unstable_loadViteServerBuild,
 } from "@remix-run/dev";
+import { createRequestHandler } from "@remix-run/express";
+import { installGlobals } from "@remix-run/node";
 
 // patch in Remix runtime globals
 installGlobals();
@@ -21,7 +22,6 @@ let vite =
     ? undefined
     : await unstable_createViteServer();
 
-// handle asset requests
 if (vite) {
   app.use(vite.middlewares);
 } else {
@@ -52,5 +52,7 @@ app.all(
   })
 );
 
-const port = process.env.PORT || 3000;
-console.log(`Express server listening on http://localhost:${port}`);
+const port = 3000;
+app.listen(port, () =>
+  console.log("Express server listening on http://localhost:" + port)
+);
