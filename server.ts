@@ -63,7 +63,7 @@ app.listen(port, async () => {
 
   // send "ready" message to dev server
   if (process.env.NODE_ENV === "development") {
-    broadcastDevReady(build);
+    await broadcastDevReady(build);
   }
 });
 
@@ -80,7 +80,7 @@ function createDevRequestHandler(): RequestHandler {
     }
 
     // 2. tell dev server that this app server is now up-to-date and ready
-    broadcastDevReady(build);
+    await broadcastDevReady(build);
   }
 
   chokidar
