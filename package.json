@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "build": "run-p build:*",
-    "build:remix": "remix build",
+    "build:remix": "vite build && vite build --ssr",
     "build:server": "esbuild --platform=node --format=esm ./server.ts --outdir=./",
     "dev": "node --loader ts-node/esm --watch-path ./server.ts --watch ./server.ts",
-    "start": "cross-env NODE_ENV=production node  server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
     "typecheck": "tsc"
   },
   "dependencies": {
