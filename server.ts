@@ -1,4 +1,7 @@
 import * as fs from "node:fs";
+import * as path from "node:path";
+import * as url from "node:url";
+
 import express from "express";
 import compression from "compression";
 import morgan from "morgan";
@@ -13,14 +16,14 @@ sourceMapSupport.install();
 /**
  * @typedef {import('@remix-run/node').ServerBuild} ServerBuild
  */
-const BUILD_PATH = "./build/index.js";
-const WATCH_PATH = "./build/version.txt";
+const BUILD_PATH = path.resolve("build/index.js");
+const VERSION_PATH = path.resolve("build/version.txt");
 
 /**
  * Initial build
  * @type {ServerBuild}
  */
-let build = await import(BUILD_PATH);
+let build = await reimportServer();
 
 // We'll make chokidar a dev dependency so it doesn't get bundled in production.
 const chokidar =
@@ -84,7 +87,7 @@ function createDevRequestHandler(): RequestHandler {
   }
 
   chokidar
-    ?.watch(WATCH_PATH, { ignoreInitial: true })
+    ?.watch(VERSION_PATH, { ignoreInitial: true })
     .on("add", handleServerUpdate)
     .on("change", handleServerUpdate);
 
@@ -108,6 +111,9 @@ function createDevRequestHandler(): RequestHandler {
 async function reimportServer() {
   const stat = fs.statSync(BUILD_PATH);
 
+  // convert build path to URL for Windows compatibility with dynamic `import`
+  const BUILD_URL = url.pathToFileURL(BUILD_PATH).href;
+
   // use a timestamp query parameter to bust the import cache
-  return import(BUILD_PATH + "?t=" + stat.mtimeMs);
+  return import(BUILD_URL + "?t=" + stat.mtimeMs);
 }

@@ -7,7 +7,7 @@
     "build:remix": "remix build",
     "build:server": "esbuild --platform=node --format=esm ./server.ts --outdir=./",
     "dev": "remix dev -c \"npm run dev:server\" --manual",
-    "dev:server": "tsx watch --clear-screen=false --ignore 'app/**' --ignore 'build/**' --ignore 'node_modules/**' --inspect ./server.ts",
+    "dev:server": "tsx ./server.ts",
     "start": "cross-env NODE_ENV=production node  server.js",
     "typecheck": "tsc"
   },
