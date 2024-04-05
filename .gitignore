@@ -6,3 +6,4 @@ node_modules
 /public/build
 .env
 yarn.lock
+package-lock.json
