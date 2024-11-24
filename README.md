@@ -3,7 +3,7 @@ Use the following commands to quickly start a Remix v2 app with a basic Express 
 - [CommonJS + server.js](https://github.com/xHomu/remix-v2-server/tree/cjs-server.js): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.js`
 - [CommonJS + server.ts](https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts`
 - [ES Modules + server.js](https://github.com/xHomu/remix-v2-server/tree/esm-server.js): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/esm-server.js`
-- [ES Modules + server.ts](https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts`
+- [ES Modules + server.ts](https://github.com/xHomu/remix-v2-server/tree/cjs-server.ts): `npx create-remix --template https://github.com/xHomu/remix-v2-server/tree/esm-server.ts`
 
 ---
 
